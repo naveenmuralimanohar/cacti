@@ -1,33 +1,43 @@
-/*****************************************************************************
- *                                CACTI
- *                      SOFTWARE LICENSE AGREEMENT
- *            Copyright 2012 Hewlett-Packard Development Company, L.P.
- *                          All Rights Reserved
+/*------------------------------------------------------------
+ *                              CACTI 6.5
+ *         Copyright 2008 Hewlett-Packard Development Corporation
+ *                         All Rights Reserved
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met: redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer;
- * redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution;
- * neither the name of the copyright holders nor the names of its
- * contributors may be used to endorse or promote products derived from
- * this software without specific prior written permission.
-
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.”
+ * Permission to use, copy, and modify this software and its documentation is
+ * hereby granted only under the following terms and conditions.  Both the
+ * above copyright notice and this permission notice must appear in all copies
+ * of the software, derivative works or modified versions, and any portions
+ * thereof, and both notices must appear in supporting documentation.
  *
- ***************************************************************************/
+ * Users of this software agree to the terms and conditions set forth herein, and
+ * hereby grant back to Hewlett-Packard Company and its affiliated companies ("HP")
+ * a non-exclusive, unrestricted, royalty-free right and license under any changes,
+ * enhancements or extensions  made to the core functions of the software, including
+ * but not limited to those affording compatibility with other hardware or software
+ * environments, but excluding applications which incorporate this software.
+ * Users further agree to use their best efforts to return to HP any such changes,
+ * enhancements or extensions that they make and inform HP of noteworthy uses of
+ * this software.  Correspondence should be provided to HP at:
+ *
+ *                       Director of Intellectual Property Licensing
+ *                       Office of Strategy and Technology
+ *                       Hewlett-Packard Company
+ *                       1501 Page Mill Road
+ *                       Palo Alto, California  94304
+ *
+ * This software may be distributed (but not offered for sale or transferred
+ * for compensation) to third parties, provided such third parties agree to
+ * abide by the terms and conditions of this notice.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND HP DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS.   IN NO EVENT SHALL HP
+ * CORPORATION BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+ * SOFTWARE.
+ *------------------------------------------------------------*/
 
 
 
@@ -44,7 +54,7 @@
 #include "nuca.h"
 #include "crossbar.h"
 #include "arbiter.h"
-//#include "highradix.h"
+#include "extio.h"
 
 using namespace std;
 
@@ -605,7 +615,57 @@ InputParameter::parse_cfg(const string & in_file)
       continue;
     }
 
-  }
+    // Parameters related to off-chip interconnect
+    
+    if(!strncmp("-dram_type", line, strlen("-dram_type"))) {
+      sscanf(line, "-dram_type \"%c\"\n", &(dram_type));
+    }
+    if(!strncmp("-iostate", line, strlen("-iostate"))) {
+      sscanf(line, "-iostate \"%c\"\n", &(iostate));
+    }
+    if(!strncmp("-addr_timing", line, strlen("-addr_timing"))) {
+      sscanf(line, "-addr_timing %lf", &(addr_timing));
+    }
+    if(!strncmp("-dram_ecc", line, strlen("-dram_ecc"))) {
+      sscanf(line, "-dram_ecc \"%c\"\n", &(dram_ecc));
+    }
+    if(!strncmp("-bus_bw", line, strlen("-bus_bw"))) {
+      sscanf(line, "-bus_bw %lf", &(bus_bw));
+    }
+    if(!strncmp("-duty_cycle", line, strlen("-duty_cycle"))) {
+      sscanf(line, "-duty_cycle %lf", &(duty_cycle));
+    }
+    if(!strncmp("-mem_density", line, strlen("-mem_density"))) {
+      sscanf(line, "-mem_density %lf", &(mem_density));
+    }
+    if(!strncmp("-activity_dq", line, strlen("-activity_dq"))) {
+      sscanf(line, "-activity_dq %lf", &activity_dq);
+    }
+    if(!strncmp("-activity_ca", line, strlen("-activity_ca"))) {
+      sscanf(line, "-activity_ca %lf", &activity_ca);
+    }
+    if(!strncmp("-bus_freq", line, strlen("-bus_freq"))) {
+      sscanf(line, "-bus_freq %lf", &bus_freq);
+    }
+    if(!strncmp("-num_dq", line, strlen("-num_dq"))) {
+      sscanf(line, "-num_dq %d", &num_dq);
+    }
+    if(!strncmp("-num_dqs", line, strlen("-num_dqs"))) {
+      sscanf(line, "-num_dqs %d", &num_dqs);
+    }
+    if(!strncmp("-num_ca", line, strlen("-num_ca"))) {
+      sscanf(line, "-num_ca %d", &num_ca);
+    }
+    if(!strncmp("-num_clk", line, strlen("-num_clk"))) {
+      sscanf(line, "-num_clk %d", &num_clk);
+    }
+    if(!strncmp("-num_mem_dq", line, strlen("-num_mem_dq"))) {
+      sscanf(line, "-num_mem_dq %d", &num_mem_dq);
+    }
+    if(!strncmp("-mem_data_width", line, strlen("-mem_data_width"))) {
+      sscanf(line, "-mem_data_width %d", &mem_data_width);
+    }
+      }
   rpters_in_htree = true;
   fclose(fp);
 }
@@ -752,36 +812,6 @@ uca_org_t cacti_interface(const string & infile_name)
   init_tech_params(g_ip->F_sz_um, false);
   Wire winit; // Do not delete this line. It initializes wires.
 
-
-//  For HighRadix Only
-//  ////  Wire wirea(g_ip->wt, 1000);
-//  ////  wirea.print_wire();
-//  ////  cout << "Wire Area " << wirea.area.get_area() << " sq. u" << endl;
-//  //  winit.print_wire();
-//  //
-//    HighRadix *hr;
-//      hr = new HighRadix();
-//      hr->compute_power();
-//      hr->print_router();
-//    exit(0);
-//
-//    double sub_switch_sz = 2;
-//    double rows = 32;
-//    for (int i=0; i<6; i++) {
-//      sub_switch_sz = pow(2, i);
-//      rows = 64/sub_switch_sz;
-//      hr = new HighRadix(sub_switch_sz, rows, .8/* freq */, 64, 2, 64, 0.7);
-//      hr->compute_power();
-//      hr->print_router();
-//      delete hr;
-//    }
-//  //  HighRadix yarc;
-//  //  yarc.compute_power();
-//  //  yarc.print_router();
-//    winit.print_wire();
-//    exit(0);
-//  For HighRadix Only End
-
   if (g_ip->nuca == 1)
   {
     Nuca n(&g_tp.peri_global);
@@ -790,6 +820,10 @@ uca_org_t cacti_interface(const string & infile_name)
   
   //g_ip->display_ip();
 
+  Extio testextio;
+  double total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin;
+  testextio.extio_power_area_timing(total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin);
+  exit(0);
   solve(&fin_res);
 
   output_UCA(&fin_res);
