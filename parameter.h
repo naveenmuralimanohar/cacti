@@ -1,5 +1,5 @@
 /*****************************************************************************
- *                                CACTI
+ *                                CACTI 7
  *                      SOFTWARE LICENSE AGREEMENT
  *            Copyright 2012 Hewlett-Packard Development Company, L.P.
  *                          All Rights Reserved
@@ -310,6 +310,7 @@ class DynamicParameter
     int deg_senseamp_muxing_non_associativity;
     int Ndsam_lev_1;
     int Ndsam_lev_2;
+    Wire_type wtype;
     int number_addr_bits_mat;             // per port
     int number_subbanks_decode;           // per_port
     int num_di_b_bank_per_port;
@@ -354,6 +355,7 @@ class DynamicParameter
         unsigned int Ndcm_,
         unsigned int Ndsam_lev_1_,
         unsigned int Ndsam_lev_2_,
+        Wire_type    wt,
         bool         is_main_mem_);
 
     int use_inp_params;

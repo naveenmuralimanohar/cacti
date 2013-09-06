@@ -31,6 +31,8 @@
 
 #include "wire.h"
 #include "cmath"
+
+#define ACTIVITY_FACTOR 0.5
 // use this constructor to calculate wire stats
 Wire::Wire(
     enum Wire_type wire_model,
@@ -469,7 +471,7 @@ Wire::low_swing_model()
 
   delay += horowitz(inputrise, timeconst, deviceType->Vth/deviceType->Vdd,
       deviceType->Vth/deviceType->Vdd, FALL);
-  temp_power += cap_eq*deviceType->Vdd*deviceType->Vdd;
+  temp_power += ACTIVITY_FACTOR*cap_eq*deviceType->Vdd*deviceType->Vdd;
 
 
   transmitter.delay = delay;
@@ -506,7 +508,7 @@ Wire::low_swing_model()
    */
   delay += horowitz(inputrise, timeconst, deviceType->Vth/deviceType->Vdd, .25, 0);
 #define VOL_SWING .1
-  temp_power += cap_eq*VOL_SWING*.400; /* .4v is the over drive voltage */
+  temp_power += ACTIVITY_FACTOR*cap_eq*VOL_SWING*.400; /* .4v is the over drive voltage */
   temp_power *= 2; /* differential wire */
 
   l_wire.delay = delay - transmitter.delay;
@@ -524,7 +526,7 @@ Wire::low_swing_model()
 
   sense_amp.delay = g_tp.sense_delay;
   out_rise_time = g_tp.sense_delay/(deviceType->Vth);
-  sense_amp.power.readOp.dynamic = g_tp.sense_dy_power;
+  sense_amp.power.readOp.dynamic = ACTIVITY_FACTOR*g_tp.sense_dy_power;
   sense_amp.power.readOp.leakage = 0; //FIXME
   sense_amp.power.readOp.gate_leakage = 0;
 
@@ -596,7 +598,7 @@ void Wire::delay_optimal_wire ()
   area.set_area((len/repeater_spacing) *
                 compute_gate_area(INV, 1, min_w_pmos * repeater_scaling,
                                           g_tp.min_w_nmos_ * repeater_scaling, g_tp.cell_h_def));
-  power.readOp.dynamic = ((len/repeater_spacing)*(switching + short_ckt));
+  power.readOp.dynamic = ACTIVITY_FACTOR*((len/repeater_spacing)*(switching + short_ckt));
   power.readOp.leakage = ((len/repeater_spacing)*
       deviceType->Vdd*
       cmos_Isub_leakage(g_tp.min_w_nmos_*repeater_scaling, beta*g_tp.min_w_nmos_*repeater_scaling, 1, inv));
@@ -754,7 +756,7 @@ powerDef Wire::wire_model (double space, double size, double *delay)
   short_ckt = deviceType->Vdd * g_tp.min_w_nmos_ * Ishort_ckt * 1.0986 *
     repeater_size * tc;
 
-  ptemp.readOp.dynamic = ((len/repeater_spacing)*(switching + short_ckt));
+  ptemp.readOp.dynamic = ACTIVITY_FACTOR*((len/repeater_spacing)*(switching + short_ckt));
   ptemp.readOp.leakage = ((len/repeater_spacing)*
       deviceType->Vdd*
       cmos_Isub_leakage(g_tp.min_w_nmos_*repeater_size, beta*g_tp.min_w_nmos_*repeater_size, 1, inv));

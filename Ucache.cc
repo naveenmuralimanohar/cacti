@@ -1,7 +1,7 @@
 /*****************************************************************************
- *                                CACTI
+ *                                CACTI 7
  *                      SOFTWARE LICENSE AGREEMENT
- *            Copyright 2012 Hewlett-Packard Development Company, L.P.
+ *            Copyright 2013 Hewlett-Packard Development Company, L.P.
  *                          All Rights Reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -124,13 +124,13 @@ void * calc_time_mt_wrapper(void * void_obj)
   int wt_min, wt_max;
 
   if (g_ip->force_wiretype) {
-    if (g_ip->wt == 0) {
-      wt_min = Low_swing;
-      wt_max = Low_swing;
-    }
-    else {
+    if (g_ip->wt == Full_swing) {
       wt_min = Global;
       wt_max = Low_swing-1;
+    }
+    else {
+      wt_min = Low_swing;
+      wt_max = Low_swing;
     }
   }
   else {
@@ -155,12 +155,12 @@ void * calc_time_mt_wrapper(void * void_obj)
             //for debuging
             if (g_ip->force_cache_config && is_tag == false)
             {
-              wr   = g_ip->wt;
+              wr   = (int) g_ip->wt;
               Ndwl = g_ip->ndwl;
               Ndbl = g_ip->ndbl;
               Ndcm = g_ip->ndcm;
               if(g_ip->nspd != 0) {
-            	  Nspd = g_ip->nspd;
+           	  Nspd = g_ip->nspd;
               }
               if(g_ip->ndsam1 != 0) {
             	  Ndsam_lev_1 = g_ip->ndsam1;
@@ -172,7 +172,7 @@ void * calc_time_mt_wrapper(void * void_obj)
             {
               is_valid_partition = calculate_time(is_tag, pure_ram, pure_cam, Nspd, Ndwl,
                   Ndbl, Ndcm, Ndsam_lev_1, Ndsam_lev_2,
-                  tag_arr.back(), 0, NULL, NULL,
+                  tag_arr.back(), 0, NULL, NULL, (Wire_type) wr,
                   is_main_mem);
             }
             // If it's a fully-associative cache, the data array partition parameters are identical to that of
@@ -181,7 +181,7 @@ void * calc_time_mt_wrapper(void * void_obj)
             {
               is_valid_partition = calculate_time(is_tag/*false*/, pure_ram, pure_cam, Nspd, Ndwl,
                   Ndbl, Ndcm, Ndsam_lev_1, Ndsam_lev_2,
-                  data_arr.back(), 0, NULL, NULL,
+                  data_arr.back(), 0, NULL, NULL, (Wire_type) wr,
                   is_main_mem);
             }
 
@@ -206,11 +206,11 @@ void * calc_time_mt_wrapper(void * void_obj)
             	wr   = wt_max;
             	iter = niter;
             	if(g_ip->nspd != 0) {
-            		Nspd = MAXDATASPD;
+            	  Nspd = MAXDATASPD;
             	}
             	if (g_ip->ndsam1 != 0) {
-            		Ndsam_lev_1 = MAX_COL_MUX+1;
-            		Ndsam_lev_2 = MAX_COL_MUX+1;
+            	  Ndsam_lev_1 = MAX_COL_MUX+1;
+            	  Ndsam_lev_2 = MAX_COL_MUX+1;
             	}
             }
           }
@@ -243,9 +243,10 @@ bool calculate_time(
     int flag_results_populate,
     results_mem_array *ptr_results,
     uca_org_t *ptr_fin_res,
+    Wire_type wt,
     bool is_main_mem)
 {
-  DynamicParameter dyn_p(is_tag, pure_ram, pure_cam, Nspd, Ndwl, Ndbl, Ndcm, Ndsam_lev_1, Ndsam_lev_2, is_main_mem);
+  DynamicParameter dyn_p(is_tag, pure_ram, pure_cam, Nspd, Ndwl, Ndbl, Ndcm, Ndsam_lev_1, Ndsam_lev_2, wt, is_main_mem);
 
   if (dyn_p.is_valid == false)
   {
@@ -914,7 +915,7 @@ void update(uca_org_t *fin_res)
   if(fin_res->tag_array2)
   {
     init_tech_params(g_ip->F_sz_um,true);
-    DynamicParameter tag_arr_dyn_p(true, g_ip->pure_ram, g_ip->pure_cam, fin_res->tag_array2->Nspd, fin_res->tag_array2->Ndwl, fin_res->tag_array2->Ndbl, fin_res->tag_array2->Ndcm, fin_res->tag_array2->Ndsam_lev_1, fin_res->tag_array2->Ndsam_lev_2, g_ip->is_main_mem);
+    DynamicParameter tag_arr_dyn_p(true, g_ip->pure_ram, g_ip->pure_cam, fin_res->tag_array2->Nspd, fin_res->tag_array2->Ndwl, fin_res->tag_array2->Ndbl, fin_res->tag_array2->Ndcm, fin_res->tag_array2->Ndsam_lev_1, fin_res->tag_array2->Ndsam_lev_2, fin_res->tag_array2->wt, g_ip->is_main_mem);
     if(tag_arr_dyn_p.is_valid)
     {
       UCA * tag_arr = new UCA(tag_arr_dyn_p);
@@ -927,7 +928,7 @@ void update(uca_org_t *fin_res)
     }
   }
   init_tech_params(g_ip->F_sz_um,false);
-  DynamicParameter data_arr_dyn_p(false, g_ip->pure_ram, g_ip->pure_cam, fin_res->data_array2->Nspd, fin_res->data_array2->Ndwl, fin_res->data_array2->Ndbl, fin_res->data_array2->Ndcm, fin_res->data_array2->Ndsam_lev_1, fin_res->data_array2->Ndsam_lev_2, g_ip->is_main_mem);
+  DynamicParameter data_arr_dyn_p(false, g_ip->pure_ram, g_ip->pure_cam, fin_res->data_array2->Nspd, fin_res->data_array2->Ndwl, fin_res->data_array2->Ndbl, fin_res->data_array2->Ndcm, fin_res->data_array2->Ndsam_lev_1, fin_res->data_array2->Ndsam_lev_2, fin_res->data_array2->wt, g_ip->is_main_mem);
   if(data_arr_dyn_p.is_valid)
   {
     UCA * data_arr = new UCA(data_arr_dyn_p);
