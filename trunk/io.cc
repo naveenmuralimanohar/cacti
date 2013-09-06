@@ -458,9 +458,17 @@ InputParameter::parse_cfg(const string & in_file)
         force_wiretype = 1;
         wt = Global;
       }
-      else {
-        wt = Low_swing;
+      else if (!(strncmp("fullswing", temp_var, strlen("fullswing")))) {
         force_wiretype = 1;
+        wt = Full_swing;        
+      }
+      else if (!(strncmp("lowswing", temp_var, strlen("lowswing")))) {
+        force_wiretype = 1;
+        wt = Low_swing;        
+      }
+      else {
+        cout << "Unknown wire type!\n";
+        exit(0);
       }
       continue;
     }
@@ -822,7 +830,7 @@ uca_org_t cacti_interface(const string & infile_name)
 
   Extio testextio;
   double total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin;
-  testextio.extio_power_area_timing(total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin);
+  //testextio.extio_power_area_timing(total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin);
   exit(0);
   solve(&fin_res);
 

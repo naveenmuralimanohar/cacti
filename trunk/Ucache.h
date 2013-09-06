@@ -1,7 +1,7 @@
 /*****************************************************************************
- *                                CACTI
+ *                                CACTI 7
  *                      SOFTWARE LICENSE AGREEMENT
- *            Copyright 2012 Hewlett-Packard Development Company, L.P.
+ *            Copyright 2013 Hewlett-Packard Development Company, L.P.
  *                          All Rights Reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -87,6 +87,7 @@ bool calculate_time(
     int flag_results_populate,
     results_mem_array *ptr_results,
     uca_org_t *ptr_fin_res,
+    Wire_type wtype,
     bool is_main_mem);
 void update(uca_org_t *fin_res);
 

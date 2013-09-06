@@ -70,6 +70,7 @@ int main(int argc,char *argv[])
       cerr << "  1) cacti -infile <input file name>" << endl;
       cerr << "  2) cacti arg1 ... arg52 -- please refer to the README file" << endl;
       cerr << " No. of arguments input - " << argc << endl;
+      cerr << argv[1] << endl;
       exit(1);
     }
     else

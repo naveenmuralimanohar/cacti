@@ -1,7 +1,7 @@
 /*****************************************************************************
- *                                CACTI
+ *                                CACTI 7
  *                      SOFTWARE LICENSE AGREEMENT
- *            Copyright 2012 Hewlett-Packard Development Company, L.P.
+ *            Copyright 2013 Hewlett-Packard Development Company, L.P.
  *                          All Rights Reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -84,11 +84,11 @@ Bank::Bank(const DynamicParameter & dyn_p):
         dataoutbits *= g_ip->data_assoc;
     }
 
-  htree_in_add   = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+  htree_in_add   = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
       total_addrbits, datainbits, 0,dataoutbits,0, num_mats_ver_dir*2, num_mats_hor_dir*2, Add_htree);
-  htree_in_data  = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+  htree_in_data  = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
       total_addrbits, datainbits, 0,dataoutbits,0, num_mats_ver_dir*2, num_mats_hor_dir*2, Data_in_htree);
-  htree_out_data = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+  htree_out_data = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
       total_addrbits, datainbits, 0,dataoutbits,0, num_mats_ver_dir*2, num_mats_hor_dir*2, Data_out_htree);
 
 //  htree_out_data = new Htree2 (g_ip->wt,(double) 100, (double)100,
@@ -99,15 +99,15 @@ Bank::Bank(const DynamicParameter & dyn_p):
   }
   else
   {
-	  htree_in_add   = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+	  htree_in_add   = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
 			  total_addrbits, datainbits, searchinbits,dataoutbits,searchoutbits, num_mats_ver_dir*2, num_mats_hor_dir*2, Add_htree);
-	  htree_in_data  = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+	  htree_in_data  = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
 			  total_addrbits, datainbits,searchinbits, dataoutbits, searchoutbits, num_mats_ver_dir*2, num_mats_hor_dir*2, Data_in_htree);
-	  htree_out_data = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+	  htree_out_data = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
 			  total_addrbits, datainbits,searchinbits, dataoutbits, searchoutbits,num_mats_ver_dir*2, num_mats_hor_dir*2, Data_out_htree);
-	  htree_in_search  = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+	  htree_in_search  = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
 			  total_addrbits, datainbits,searchinbits, dataoutbits, searchoutbits, num_mats_ver_dir*2, num_mats_hor_dir*2, Data_in_htree,true, true);
-	  htree_out_search = new Htree2 (g_ip->wt,(double) mat.area.w, (double)mat.area.h,
+	  htree_out_search = new Htree2 (dp.wtype,(double) mat.area.w, (double)mat.area.h,
 			  total_addrbits, datainbits,searchinbits, dataoutbits, searchoutbits,num_mats_ver_dir*2, num_mats_hor_dir*2, Data_out_htree,true);
 
       area.w = htree_in_data->area.w;

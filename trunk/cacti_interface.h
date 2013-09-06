@@ -103,14 +103,15 @@ class powerDef
 
 enum Wire_type
 {
-    Global /* gloabl wires with repeaters */,
+    Global /* global wires with repeaters */,
     Global_5 /* 5% delay penalty */,
     Global_10 /* 10% delay penalty */,
     Global_20 /* 20% delay penalty */,
     Global_30 /* 30% delay penalty */,
     Low_swing /* differential low power wires with high area overhead */,
+    Full_swing /* models all global wires with different latencies (Global_x)*/,
     Semi_global /* mid-level wires with repeaters*/,
-    Transmission /* tranmission lines with high area overhead */,
+    Transmission /* transmission lines with high area overhead */,
     Optical /* optical wires */,
     Invalid_wtype
 };

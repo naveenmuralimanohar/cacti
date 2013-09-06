@@ -1,7 +1,7 @@
 /*****************************************************************************
- *                                CACTI
+ *                                CACTI 7
  *                      SOFTWARE LICENSE AGREEMENT
- *            Copyright 2012 Hewlett-Packard Development Company, L.P.
+ *            Copyright 2013 Hewlett-Packard Development Company, L.P.
  *                          All Rights Reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -201,10 +201,11 @@ DynamicParameter::DynamicParameter(
     unsigned int Ndcm_,
     unsigned int Ndsam_lev_1_,
     unsigned int Ndsam_lev_2_,
+    Wire_type wt,
     bool is_main_mem_):
   is_tag(is_tag_), pure_ram(pure_ram_), pure_cam(pure_cam_), tagbits(0), Nspd(Nspd_), Ndwl(Ndwl_), Ndbl(Ndbl_),Ndcm(Ndcm_),
   Ndsam_lev_1(Ndsam_lev_1_), Ndsam_lev_2(Ndsam_lev_2_),
-  number_way_select_signals_mat(0), V_b_sense(0), use_inp_params(0),
+  number_way_select_signals_mat(0), V_b_sense(0), use_inp_params(0), wtype(wt),
   is_main_mem(is_main_mem_), cell(), is_valid(false)
 {
   ram_cell_tech_type = (is_tag) ? g_ip->tag_arr_ram_cell_tech_type : g_ip->data_arr_ram_cell_tech_type;

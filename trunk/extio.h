@@ -21,7 +21,7 @@ public:
 	int extio_power_term(double io_power_term); 
 
  
-int extio_area_timing(double io_power, double phy_power, double io_area, double io_tmargin, double io_vmargin); 
+int extio_power_area_timing(double io_power, double phy_power, double io_area, double io_tmargin, double io_vmargin); 
 
  
 }; 
