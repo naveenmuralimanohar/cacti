@@ -255,7 +255,8 @@ enum ram_cell_tech_type_num
   itrs_lstp = 1,
   itrs_lop  = 2,
   lp_dram   = 3,
-  comm_dram = 4
+  comm_dram = 4,
+  xpoint_memristor = 5
 };
 
 const double pppm[4]      = {1,1,1,1};
