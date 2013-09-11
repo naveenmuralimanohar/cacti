@@ -108,7 +108,7 @@ int Extio::extio_power_term()
 
 
 
-int Extio::extio_power_phy (double phy_power)
+int Extio::extio_power_phy ()
 {
 
 
