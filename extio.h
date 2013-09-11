@@ -16,7 +16,7 @@ public:
 
 	int extio_power_dynamic(double io_power_dynamic); 
 
-	int extio_power_phy(double phy_power); 
+	int extio_power_phy(); 
 
 	int extio_power_term(); 
 
