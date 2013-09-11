@@ -11,15 +11,10 @@ public:
   Extio(IOTechParam *); 
     	
 	int extio_area(); 
-
-	int extio_eye(double io_tmargin, double io_vmargin); 
-
+	int extio_eye(); 
 	int extio_power_dynamic(); 
-
 	int extio_power_phy(); 
-
 	int extio_power_term(); 
-
   int extio_power_area_timing(double io_power, double phy_power, double io_area, double io_tmargin, double io_vmargin); 
 
 private:
@@ -42,6 +37,8 @@ private:
   double power_dq_write, power_dqs_write, power_ca_write,
          power_dq_read, power_dqs_read, power_ca_read, 
          power_clk;
+
+  double io_tmargin, io_vmargin;
  
 }; 
  
