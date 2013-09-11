@@ -55,6 +55,7 @@
 #include "crossbar.h"
 #include "arbiter.h"
 #include "extio.h"
+#include "extio_technology.h"
 
 using namespace std;
 
@@ -828,7 +829,8 @@ uca_org_t cacti_interface(const string & infile_name)
   
   //g_ip->display_ip();
 
-  Extio testextio;
+  IOTechParam iot(g_ip);
+  Extio testextio(&iot);
   double total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin;
   //testextio.extio_power_area_timing(total_io_p, total_phy_p, total_io_area, total_vmargin, total_tmargin);
   exit(0);
