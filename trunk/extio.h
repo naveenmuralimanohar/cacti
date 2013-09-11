@@ -2,15 +2,15 @@
 #define _extio_H_
 #include "parameter.h"
 #include "component.h"
+#include "extio_technology.h"
 
 class Extio : public Component
 {
 public: 
-     
-    Extio(){}; 
-   //The power calculation 
+  
+  Extio(IOTechParam *); 
     	
-	int extio_area(double io_area); 
+	int extio_area(); 
 
 	int extio_eye(double io_tmargin, double io_vmargin); 
 
@@ -18,11 +18,20 @@ public:
 
 	int extio_power_phy(double phy_power); 
 
-	int extio_power_term(double io_power_term); 
+	int extio_power_term(); 
 
- 
-int extio_power_area_timing(double io_power, double phy_power, double io_area, double io_tmargin, double io_vmargin); 
+  int extio_power_area_timing(double io_power, double phy_power, double io_area, double io_tmargin, double io_vmargin); 
 
+private:
+  IOTechParam *io_param;  
+
+  double io_area;
+
+  double io_power_term;
+  double power_termination_write;
+  double power_termination_read;
+  double power_bias;
+  double power_clk_bias;
  
 }; 
  
