@@ -14,7 +14,7 @@ public:
 
 	int extio_eye(double io_tmargin, double io_vmargin); 
 
-	int extio_power_dynamic(double io_power_dynamic); 
+	int extio_power_dynamic(); 
 
 	int extio_power_phy(); 
 
@@ -36,6 +36,12 @@ private:
   double phy_power;
   double phy_static_power;
   double phy_dynamic_power;
+
+  double io_power_dynamic;
+
+  double power_dq_write, power_dqs_write, power_ca_write,
+         power_dq_read, power_dqs_read, power_ca_read, 
+         power_clk;
  
 }; 
  
