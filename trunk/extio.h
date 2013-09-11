@@ -32,6 +32,10 @@ private:
   double power_termination_read;
   double power_bias;
   double power_clk_bias;
+
+  double phy_power;
+  double phy_static_power;
+  double phy_dynamic_power;
  
 }; 
  
