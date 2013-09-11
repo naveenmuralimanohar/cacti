@@ -110,6 +110,30 @@ IOTechParam::IOTechParam(InputParameter * g_ip)
     t_jitter_addr_hold_sen = t_jitter_addr_hold * (1 + 0.2*(rtt_ca/100 - 1) +
         0.1*(r_on/34 - 1) + 0.4*(num_mem_ca/16 - 1));
 
+    // PHY Static Power Coefficients (mW)
+
+    phy_datapath_s = 0; 
+    phy_phase_rotator_s = 5; 
+    phy_clock_tree_s = 0; 
+    phy_rx_s = 3; 
+    phy_dcc_s = 0; 
+    phy_deskew_s = 0; 
+    phy_leveling_s = 0;
+    phy_pll_s = 2;
+
+
+    // PHY Dynamic Power Coefficients (mW/Gbps)
+
+    phy_datapath_d = 0.3;
+    phy_phase_rotator_d = 0.01;
+    phy_clock_tree_d = 0.4;
+    phy_rx_d = 0.2;
+    phy_dcc_d = 0;
+    phy_deskew_d = 0;
+    phy_leveling_d = 0;
+    phy_pll_d = 0.05;
+
+
   }
    else if (g_ip->dram_type == 'W') { //WIDEIO 
      //Technology Parameters
@@ -203,6 +227,27 @@ IOTechParam::IOTechParam(InputParameter * g_ip)
          0.4*(num_mem_ca/16 - 1));
      t_jitter_addr_hold_sen = t_jitter_addr_hold * (1 + 0.1*(r_on/50 - 1) + 
          0.4*(num_mem_ca/16 - 1));
+
+     // PHY Static Power Coefficients (mW)
+     phy_datapath_s = 0;
+     phy_phase_rotator_s = 1;
+     phy_clock_tree_s = 0;
+     phy_rx_s = 0;
+     phy_dcc_s = 0;
+     phy_deskew_s = 0;
+     phy_leveling_s = 0;
+     phy_pll_s = 0;
+
+
+     // PHY Dynamic Power Coefficients (mW/Gbps)
+     phy_datapath_d = 0.3;
+     phy_phase_rotator_d = 0.01;
+     phy_clock_tree_d = 0.2;
+     phy_rx_d = 0.1;
+     phy_dcc_d = 0;
+     phy_deskew_d = 0;
+     phy_leveling_d = 0;
+     phy_pll_d = 0;
 
    }
    else { //Default parameters for DDR3
@@ -309,6 +354,25 @@ IOTechParam::IOTechParam(InputParameter * g_ip)
      t_jitter_addr_hold_sen = t_jitter_addr_hold * (1 + 0.2*(rtt_ca/50 - 1) + 
          0.1*(r_on/34 - 1) + 0.4*(num_mem_ca/16 - 1));
 
+     // PHY Static Power Coefficients (mW)
+     phy_datapath_s = 0; 
+     phy_phase_rotator_s = 10; 
+     phy_clock_tree_s = 0; 
+     phy_rx_s = 10; 
+     phy_dcc_s = 0; 
+     phy_deskew_s = 0; 
+     phy_leveling_s = 0; 
+     phy_pll_s = 10; 
+
+     // PHY Dynamic Power Coefficients (mW/Gbps)
+     phy_datapath_d = 0.5; 
+     phy_phase_rotator_d = 0.01; 
+     phy_clock_tree_d = 0.5; 
+     phy_rx_d = 0.5; 
+     phy_dcc_d = 0.05; 
+     phy_deskew_d = 0.1; 
+     phy_leveling_d = 0.05; 
+     phy_pll_d = 0.05; 
 
    }
 

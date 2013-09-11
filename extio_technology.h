@@ -152,6 +152,29 @@ class IOTechParam
       double v_sw_data_write_load2; //Swing for DQ at dram2 during WRITE
       double v_sw_data_write_line; //Swing for DQ on the line during WRITE
 
+		// PHY Static Power Coefficients (mW)
+
+	    double phy_datapath_s; // Datapath Static Power
+	    double phy_phase_rotator_s; // Phase Rotator Static Power
+	    double phy_clock_tree_s; // Clock Tree Static Power
+	    double phy_rx_s; // Receiver Static Power
+	    double phy_dcc_s; // Duty Cycle Correction Static Power
+	    double phy_deskew_s; // Deskewing Static Power
+	    double phy_leveling_s; // Write and Read Leveling Static Power
+	    double phy_pll_s; // PHY PLL Static Power
+
+
+      // PHY Dynamic Power Coefficients (mW/Gbps)
+
+	    double phy_datapath_d; // Datapath Dynamic Power
+	    double phy_phase_rotator_d; // Phase Rotator Dynamic Power
+	    double phy_clock_tree_d; // Clock Tree Dynamic Power
+	    double phy_rx_d; // Receiver Dynamic Power
+	    double phy_dcc_d; // Duty Cycle Correction Dynamic Power
+	    double phy_deskew_d; // Deskewing Dynamic Power
+	    double phy_leveling_d; // Write and Read Leveling Dynamic Power
+	    double phy_pll_d; // PHY PLL Dynamic Power
+
 };
 
 #endif

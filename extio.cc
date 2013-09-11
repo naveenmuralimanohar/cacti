@@ -105,3 +105,30 @@ int Extio::extio_power_term()
 	printf("IO Termination and Bias Power (mW) = ");
 	cout << io_power_term << endl;
 }
+
+
+
+int Extio::extio_power_phy (double phy_power)
+{
+
+
+  phy_static_power = io_param->phy_datapath_s + io_param->phy_phase_rotator_s +
+      io_param->phy_clock_tree_s + io_param->phy_rx_s + io_param->phy_dcc_s + 
+      io_param->phy_deskew_s + io_param->phy_leveling_s + io_param->phy_pll_s; // in mW
+
+  phy_dynamic_power = io_param->phy_datapath_d + io_param->phy_phase_rotator_d + 
+      io_param->phy_clock_tree_d + io_param->phy_rx_d + io_param->phy_dcc_d + 
+      io_param->phy_deskew_d + io_param->phy_leveling_d + 
+      io_param->phy_pll_d; // in mW/Gbps
+
+
+  phy_power = phy_static_power + g_ip->bus_bw * 8 *
+      phy_dynamic_power; // Total PHY power in mW
+
+
+  //OUTPUTS
+
+  printf("PHY Power (mW) = ");
+  cout << phy_power << endl;
+
+}
