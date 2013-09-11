@@ -73,13 +73,16 @@ void init_tech_params(double technology, bool is_tag)
   g_tp.reset();
   double gmp_to_gmn_multiplier_periph_global = 0;
 
-  double curr_Wmemcella_dram, curr_Wmemcellpmos_dram, curr_Wmemcellnmos_dram,
+  double curr_area_cell_memristor, curr_asp_ratio_cell_memristor,
+         curr_Wmemcella_dram, curr_Wmemcellpmos_dram, curr_Wmemcellnmos_dram,
          curr_area_cell_dram, curr_asp_ratio_cell_dram, curr_Wmemcella_sram,
          curr_Wmemcellpmos_sram, curr_Wmemcellnmos_sram, curr_area_cell_sram,
          curr_asp_ratio_cell_sram, curr_I_off_dram_cell_worst_case_length_temp;
   double curr_Wmemcella_cam, curr_Wmemcellpmos_cam, curr_Wmemcellnmos_cam, curr_area_cell_cam,//Sheng: CAM data
          curr_asp_ratio_cell_cam;
   double SENSE_AMP_D, SENSE_AMP_P; // J
+  double area_cell_memristor = 0;
+  double asp_ratio_cell_memristor = 0;
   double area_cell_dram = 0;
   double asp_ratio_cell_dram = 0;
   double area_cell_sram = 0;
@@ -276,6 +279,9 @@ void init_tech_params(double technology, bool is_tag)
       I_g_on_n[0][90] = 1.65e-10;
       I_g_on_n[0][100] = 1.65e-10;
 
+      //memristor cell properties
+      curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+      curr_asp_ratio_cell_memristor = 1;
       //SRAM cell properties
       curr_Wmemcella_sram = 1.31 * g_ip->F_sz_um;
       curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -530,6 +536,9 @@ void init_tech_params(double technology, bool is_tag)
         I_off_n[3][100] = 1.67e-12;
       }
 
+      //memristor cell properties
+      curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+      curr_asp_ratio_cell_memristor = 1;
       //SRAM cell properties
       curr_Wmemcella_sram = 1.31 * g_ip->F_sz_um;
       curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -784,6 +793,9 @@ void init_tech_params(double technology, bool is_tag)
         I_off_n[3][100] = 3.99e-12;
       }
 
+      //memristor cell properties
+      curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+      curr_asp_ratio_cell_memristor = 1;
       //SRAM cell properties
       curr_Wmemcella_sram = 1.31 * g_ip->F_sz_um;
       curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -1038,6 +1050,9 @@ void init_tech_params(double technology, bool is_tag)
       }
 
 
+      //memristor cell properties
+      curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+      curr_asp_ratio_cell_memristor = 1;
       //SRAM cell properties
       curr_Wmemcella_sram = 1.31 * g_ip->F_sz_um;
       curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -1307,6 +1322,9 @@ void init_tech_params(double technology, bool is_tag)
         I_off_n[3][100] = 7.16e-12;
       }
 
+      //memristor cell properties
+      curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+      curr_asp_ratio_cell_memristor = 1;
       //SRAM cell properties
       curr_Wmemcella_sram    = 1.31 * g_ip->F_sz_um;
       curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -1528,6 +1546,9 @@ void init_tech_params(double technology, bool is_tag)
       	  //some error handler
         }
 
+        //memristor cell properties
+        curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+        curr_asp_ratio_cell_memristor = 1;
         //SRAM cell properties
         curr_Wmemcella_sram    = 1.31 * g_ip->F_sz_um;
         curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -1701,6 +1722,9 @@ void init_tech_params(double technology, bool is_tag)
       	  //some error handler
         }
 
+        //memristor cell properties
+        curr_area_cell_memristor = 4 * g_ip->F_sz_um * g_ip->F_sz_um;
+        curr_asp_ratio_cell_memristor = 1;
         //SRAM cell properties
         curr_Wmemcella_sram    = 1.31 * g_ip->F_sz_um;
         curr_Wmemcellpmos_sram = 1.23 * g_ip->F_sz_um;
@@ -1851,6 +1875,9 @@ void init_tech_params(double technology, bool is_tag)
     area_cell_sram += curr_alpha * curr_area_cell_sram;
     asp_ratio_cell_sram += curr_alpha * curr_asp_ratio_cell_sram;
 
+    area_cell_memristor += curr_alpha * curr_area_cell_memristor;
+    asp_ratio_cell_memristor += curr_alpha * curr_asp_ratio_cell_memristor;
+
     g_tp.cam.cell_a_w    += curr_alpha * curr_Wmemcella_cam;//sheng
     g_tp.cam.cell_pmos_w += curr_alpha * curr_Wmemcellpmos_cam;
     g_tp.cam.cell_nmos_w += curr_alpha * curr_Wmemcellnmos_cam;
@@ -1926,10 +1953,14 @@ void init_tech_params(double technology, bool is_tag)
   double gmp_sense_amp_latch = gmp_to_gmn_multiplier_periph_global * gmn_sense_amp_latch;
   g_tp.gm_sense_amp_latch = gmn_sense_amp_latch + gmp_sense_amp_latch;
 
+  g_tp.memristor.b_w = sqrt(area_cell_memristor / (asp_ratio_cell_memristor));
+  g_tp.memristor.b_h = asp_ratio_cell_memristor * g_tp.memristor.b_w;
   g_tp.dram.b_w = sqrt(area_cell_dram / (asp_ratio_cell_dram));
   g_tp.dram.b_h = asp_ratio_cell_dram * g_tp.dram.b_w;
   g_tp.sram.b_w = sqrt(area_cell_sram / (asp_ratio_cell_sram));
   g_tp.sram.b_h = asp_ratio_cell_sram * g_tp.sram.b_w;
+  g_tp.memristor.b_w = sqrt(area_cell_memristor / (asp_ratio_cell_memristor));
+  g_tp.memristor.b_h = asp_ratio_cell_memristor * g_tp.memristor.b_w;
   g_tp.cam.b_w =  sqrt(area_cell_cam / (asp_ratio_cell_cam));//Sheng
   g_tp.cam.b_h = asp_ratio_cell_cam * g_tp.cam.b_w;
 

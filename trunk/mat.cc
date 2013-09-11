@@ -71,6 +71,7 @@ Mat::Mat(const DynamicParameter & dyn_p)
   is_fa = (dp.fully_assoc) ? true : false;
   camFlag = (is_fa || pure_cam);//although cam_cell.w = cell.w for fa, we still differentiate them.
 
+
   if (is_fa || pure_cam)
 	  num_subarrays_per_row = num_subarrays_per_mat>2?num_subarrays_per_mat/2:num_subarrays_per_mat;
 

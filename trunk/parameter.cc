@@ -210,6 +210,7 @@ DynamicParameter::DynamicParameter(
 {
   ram_cell_tech_type = (is_tag) ? g_ip->tag_arr_ram_cell_tech_type : g_ip->data_arr_ram_cell_tech_type;
   is_dram            = ((ram_cell_tech_type == lp_dram) || (ram_cell_tech_type == comm_dram));
+  is_memristor       = ram_cell_tech_type == xpoint_memristor;
 
   unsigned int capacity_per_die = g_ip->cache_sz / NUMBER_STACKED_DIE_LAYERS;  // capacity per stacked die layer
   const TechnologyParameter::InterconnectType & wire_local = g_tp.wire_local;
@@ -367,7 +368,11 @@ DynamicParameter::DynamicParameter(
 			  cell.h = g_tp.dram.b_h;
 			  cell.w = g_tp.dram.b_w;
 		  }
-		  else
+		  else if (is_memristor)
+                  {
+			  cell.h = g_tp.memristor.b_h;
+			  cell.w = g_tp.memristor.b_w;
+                  }
 		  {
 			  cell.h = g_tp.sram.b_h + 2 * wire_local.pitch * (g_ip->num_wr_ports +
 					  g_ip->num_rw_ports - 1 + g_ip->num_rd_ports);

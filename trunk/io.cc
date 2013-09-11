@@ -255,6 +255,9 @@ InputParameter::parse_cfg(const string & in_file)
       else if(!strncmp("comm-dram", temp_var, strlen("comm-dram"))) {
         data_arr_ram_cell_tech_type = 4;
       }
+      else if(!strncmp("xpoint-memristor", temp_var, strlen("xpoint-memristor"))) {
+        data_arr_ram_cell_tech_type = 5;
+      }
       else {
         cout << "ERROR: Invalid type!\n";
         exit(0);
@@ -298,6 +301,9 @@ InputParameter::parse_cfg(const string & in_file)
       }
       else if(!strncmp("comm-dram", temp_var, strlen("comm-dram"))) {
         tag_arr_ram_cell_tech_type = 4;
+      }
+      else if(!strncmp("xpoint-memristor", temp_var, strlen("xpoint-memristor"))) {
+        tag_arr_ram_cell_tech_type = 5;
       }
       else {
         cout << "ERROR: Invalid type!\n";
@@ -1690,6 +1696,10 @@ void output_UCA(uca_org_t *fr)
       cout << "\n---------- CACTI version 6.5, Uniform" <<
         "Cache Access Commodity DRAM Model ----------\n";
     }
+    else if (g_ip->data_arr_ram_cell_tech_type == 5) {
+      cout << "\n---------- CACTI version 6.5, Uniform" <<
+        "Cache Access Memristor Model ----------\n";
+    }
     else {
       cout << "\n---------- CACTI version 6.5, Uniform Cache Access "
         "SRAM Model ----------\n";
@@ -1726,7 +1736,7 @@ void output_UCA(uca_org_t *fr)
 
   cout << "    Access time (ns): " << fr->access_time*1e9 << endl;
   cout << "    Cycle time (ns):  " << fr->cycle_time*1e9 << endl;
-  if (g_ip->data_arr_ram_cell_tech_type >= 4) {
+  if (g_ip->data_arr_ram_cell_tech_type == 4) {
     cout << "    Precharge Delay (ns): " << fr->data_array2->precharge_delay*1e9 << endl;
     cout << "    Activate Energy (nJ): " << fr->data_array2->activate_energy*1e9 << endl;
     cout << "    Read Energy (nJ): " << fr->data_array2->read_energy*1e9 << endl;

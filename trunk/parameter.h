@@ -245,6 +245,7 @@ class TechnologyParameter
 
   MemoryType sram;
   MemoryType dram;
+  MemoryType memristor;
   MemoryType cam;
 
   void display(uint32_t indent = 0);
@@ -332,6 +333,7 @@ class DynamicParameter
 
     int num_act_mats_hor_dir_sl;
     bool is_dram;
+    bool is_memristor;
     double V_b_sense;
     unsigned int num_r_subarray;
     unsigned int num_c_subarray;
