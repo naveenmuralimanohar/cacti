@@ -255,9 +255,6 @@ InputParameter::parse_cfg(const string & in_file)
       else if(!strncmp("comm-dram", temp_var, strlen("comm-dram"))) {
         data_arr_ram_cell_tech_type = 4;
       }
-      else if(!strncmp("xpoint-memristor", temp_var, strlen("xpoint-memristor"))) {
-        data_arr_ram_cell_tech_type = 5;
-      }
       else {
         cout << "ERROR: Invalid type!\n";
         exit(0);
@@ -301,9 +298,6 @@ InputParameter::parse_cfg(const string & in_file)
       }
       else if(!strncmp("comm-dram", temp_var, strlen("comm-dram"))) {
         tag_arr_ram_cell_tech_type = 4;
-      }
-      else if(!strncmp("xpoint-memristor", temp_var, strlen("xpoint-memristor"))) {
-        tag_arr_ram_cell_tech_type = 5;
       }
       else {
         cout << "ERROR: Invalid type!\n";

@@ -707,7 +707,6 @@ void filter_data_arr(list<mem_array *> & curr_list)
 void solve(uca_org_t *fin_res)
 {
   bool   is_dram  = false;
-  bool   is_memristor  = false;
   int    pure_ram = g_ip->pure_ram;
   bool   pure_cam = g_ip->pure_cam;
 
@@ -750,7 +749,6 @@ void solve(uca_org_t *fin_res)
     is_tag              = true;
     ram_cell_tech_type  = g_ip->tag_arr_ram_cell_tech_type;
     is_dram             = ((ram_cell_tech_type == lp_dram) || (ram_cell_tech_type == comm_dram));
-    is_memristor        = ram_cell_tech_type == xpoint_memristor;
     init_tech_params(g_ip->F_sz_um, is_tag);
 
     for (uint32_t t = 0; t < nthreads; t++)
@@ -782,7 +780,6 @@ void solve(uca_org_t *fin_res)
     is_tag              = false;
     ram_cell_tech_type  = g_ip->data_arr_ram_cell_tech_type;
     is_dram             = ((ram_cell_tech_type == lp_dram) || (ram_cell_tech_type == comm_dram));
-    is_memristor        = ram_cell_tech_type == xpoint_memristor;
     init_tech_params(g_ip->F_sz_um, is_tag);
 
     for (uint32_t t = 0; t < nthreads; t++)
