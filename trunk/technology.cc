@@ -1851,6 +1851,82 @@ void init_tech_params(double technology, bool is_tag)
     area_cell_sram += curr_alpha * curr_area_cell_sram;
     asp_ratio_cell_sram += curr_alpha * curr_asp_ratio_cell_sram;
 
+
+    g_tp.cam.cell_a_w    += curr_alpha * curr_Wmemcella_cam;//sheng
+    g_tp.cam.cell_pmos_w += curr_alpha * curr_Wmemcellpmos_cam;
+    g_tp.cam.cell_nmos_w += curr_alpha * curr_Wmemcellnmos_cam;
+    area_cell_cam += curr_alpha * curr_area_cell_cam;
+    asp_ratio_cell_cam += curr_alpha * curr_asp_ratio_cell_cam;
+
+    //Sense amplifier latch Gm calculation
+    mobility_eff_periph_global += curr_alpha * mobility_eff[peri_global_tech_type];
+    Vdsat_periph_global += curr_alpha * Vdsat[peri_global_tech_type];
+
+    //Empirical undifferetiated core/FU coefficient
+    g_tp.scaling_factor.logic_scaling_co_eff += curr_alpha * curr_logic_scaling_co_eff;
+    g_tp.scaling_factor.core_tx_density += curr_alpha * curr_core_tx_density;
+    g_tp.chip_layout_overhead  += curr_alpha * curr_chip_layout_overhead;
+    g_tp.macro_layout_overhead += curr_alpha * curr_macro_layout_overhead;
+    g_tp.sckt_co_eff           += curr_alpha * curr_sckt_co_eff;
+  }
+
+
+  //Currently we are not modeling the resistance/capacitance of poly anywhere.
+  //Continuous function (or date have been processed) does not need linear interpolation
+  g_tp.w_comp_inv_p1 = 12.5 * g_ip->F_sz_um;//this was 10 micron for the 0.8 micron process
+  g_tp.w_comp_inv_n1 =  7.5 * g_ip->F_sz_um;//this was  6 micron for the 0.8 micron process
+  g_tp.w_comp_inv_p2 =   25 * g_ip->F_sz_um;//this was 20 micron for the 0.8 micron process
+  g_tp.w_comp_inv_n2 =   15 * g_ip->F_sz_um;//this was 12 micron for the 0.8 micron process
+  g_tp.w_comp_inv_p3 =   50 * g_ip->F_sz_um;//this was 40 micron for the 0.8 micron process
+  g_tp.w_comp_inv_n3 =   30 * g_ip->F_sz_um;//this was 24 micron for the 0.8 micron process
+  g_tp.w_eval_inv_p  =  100 * g_ip->F_sz_um;//this was 80 micron for the 0.8 micron process
+  g_tp.w_eval_inv_n  =   50 * g_ip->F_sz_um;//this was 40 micron for the 0.8 micron process
+  g_tp.w_comp_n     = 12.5 * g_ip->F_sz_um;//this was 10 micron for the 0.8 micron process
+  g_tp.w_comp_p     = 37.5 * g_ip->F_sz_um;//this was 30 micron for the 0.8 micron process
+
+  g_tp.MIN_GAP_BET_P_AND_N_DIFFS = 5 * g_ip->F_sz_um;
+  g_tp.MIN_GAP_BET_SAME_TYPE_DIFFS = 1.5 * g_ip->F_sz_um;
+  g_tp.HPOWERRAIL = 2 * g_ip->F_sz_um;
+  g_tp.cell_h_def = 50 * g_ip->F_sz_um;
+  g_tp.w_poly_contact = g_ip->F_sz_um;
+  g_tp.spacing_poly_to_contact = g_ip->F_sz_um;
+  g_tp.spacing_poly_to_poly = 1.5 * g_ip->F_sz_um;
+  g_tp.ram_wl_stitching_overhead_ = 7.5 * g_ip->F_sz_um;
+
+  g_tp.min_w_nmos_ = 3 * g_ip->F_sz_um / 2;
+  g_tp.max_w_nmos_ = 100 * g_ip->F_sz_um;
+  g_tp.w_iso       = 12.5*g_ip->F_sz_um;//was 10 micron for the 0.8 micron process
+  g_tp.w_sense_n   = 3.75*g_ip->F_sz_um; // sense amplifier N-trans; was 3 micron for the 0.8 micron process
+  g_tp.w_sense_p   = 7.5*g_ip->F_sz_um; // sense amplifier P-trans; was 6 micron for the 0.8 micron process
+  g_tp.w_sense_en  = 5*g_ip->F_sz_um; // Sense enable transistor of the sense amplifier; was 4 micron for the 0.8 micron process
+  g_tp.w_nmos_b_mux  = 6 * g_tp.min_w_nmos_;
+  g_tp.w_nmos_sa_mux = 6 * g_tp.min_w_nmos_;
+
+  if (ram_cell_tech_type == comm_dram)
+  {
+    g_tp.max_w_nmos_dec = 8 * g_ip->F_sz_um;
+    g_tp.h_dec          = 8;  // in the unit of memory cell height
+  }
+  else
+  {
+    g_tp.max_w_nmos_dec = g_tp.max_w_nmos_;
+    g_tp.h_dec          = 4;  // in the unit of memory cell height
+  }
+
+  g_tp.peri_global.C_overlap = 0.2 * g_tp.peri_global.C_g_ideal;
+  g_tp.sram_cell.C_overlap   = 0.2 * g_tp.sram_cell.C_g_ideal;
+  g_tp.cam_cell.C_overlap    = 0.2 * g_tp.cam_cell.C_g_ideal;
+
+  g_tp.dram_acc.C_overlap = 0.2 * g_tp.dram_acc.C_g_ideal;
+  g_tp.dram_acc.R_nch_on = g_tp.dram_cell_Vdd / g_tp.dram_acc.I_on_n;
+  //g_tp.dram_acc.R_pch_on = g_tp.dram_cell_Vdd / g_tp.dram_acc.I_on_p;
+
+  g_tp.dram_wl.C_overlap = 0.2 * g_tp.dram_wl.C_g_ideal;
+
+  double gmn_sense_amp_latch = (mobility_eff_periph_global / 2) * g_tp.peri_global.C_ox * (g_tp.w_sense_n / g_tp.peri_global.l_elec) * Vdsat_periph_global;
+  double gmp_sense_amp_latch = gmp_to_gmn_multiplier_periph_global * gmn_sense_amp_latch;
+  g_tp.gm_sense_amp_latch = gmn_sense_amp_latch + gmp_sense_amp_latch;
+
   g_tp.dram.b_w = sqrt(area_cell_dram / (asp_ratio_cell_dram));
   g_tp.dram.b_h = asp_ratio_cell_dram * g_tp.dram.b_w;
   g_tp.sram.b_w = sqrt(area_cell_sram / (asp_ratio_cell_sram));
