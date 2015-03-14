@@ -1,0 +1,1 @@
+CACTI takes a set of memory parameters as input and calculates its area, delay, and power.
